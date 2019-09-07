@@ -45,7 +45,7 @@ function YenKSP(graphHash, source, sink, K) {
     var B = [];
 
     // for k from 1 to K:
-    for (let k = 1; k <= K; k++) {
+    for (let k = 1; k < K; k++) {
 
         // The spur node ranges from the first node to the next to last node in the previous k-shortest path.
         // for i from 0 to size(A[k − 1]) − 2:
@@ -86,17 +86,27 @@ function YenKSP(graphHash, source, sink, K) {
             let spurPath = Dijkstra(graphHash, spurNode, sink).path;
             console.log('spurPath', spurPath);
 
-            // Entire path is made up of the root path and spur path.
-            //         totalPath = rootPath + spurPath;
-            let totalPath;
-            if (rootPath[rootPath.length - 1] == spurPath[0]) {
-                totalPath = rootPath.concat(spurPath.slice(1));
+            if (spurPath != null) {
+                // Entire path is made up of the root path and spur path.
+                //         totalPath = rootPath + spurPath;
+                let totalPath;
+                if (rootPath[rootPath.length - 1] == spurPath[0]) {
+                    totalPath = rootPath.concat(spurPath.slice(1));
+                } else {
+                    throw new Error('not equal');
+                }
+                // Add the potential k-shortest path to the heap.
+                if (!B.some((path) => path.join(',') == totalPath.join(','))) {
+                    B.push(totalPath);
+                    console.log('Added to B', totalPath);
+                    console.log(B);
+                } else {
+                    console.log('Already added to B', totalPath);
+                    console.log(B);
+                }
             } else {
-                throw new Error('not equal');
+                console.log('spurPath not found');
             }
-            console.log('totalPath =', totalPath);
-            // Add the potential k-shortest path to the heap.
-            B.push(totalPath);
 
             // Add back the edges and nodes that were removed from the graph.
             for (let removedEdge of removedEdges) {
@@ -132,6 +142,7 @@ function YenKSP(graphHash, source, sink, K) {
         console.log('A:', A);
         B.shift();
     }
+    console.log('正常終了');
     return A;
 }
 
