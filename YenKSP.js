@@ -4,13 +4,13 @@
 
 const Graph = require('node-dijkstra');
 
-let console = {
-    log: function() {
-    },
-    error: function(a) {
-
-    }
-}
+//let console = {
+//    log: function() {
+//    },
+//    error: function(a) {
+//
+//    }
+//}
 
 /**
  * ダイクストラ用のグラフに辺を追加する
@@ -44,7 +44,7 @@ function YenKSP(graphHash, source, sink, K) {
     // Determine the shortest path from the source to the sink.
     let shortestPath = Dijkstra(graphHash, source, sink).path;
     if (shortestPath == null) {
-        console.log("no shortest path");
+        console.log("No shortest path");
         return A;
     }
     A[0] = shortestPath;
@@ -104,6 +104,8 @@ function YenKSP(graphHash, source, sink, K) {
                     throw new Error('not equal');
                 }
                 // Add the potential k-shortest path to the heap.
+                // totalPathがBに既に入っていなければ追加
+                // FIXME: 本来はBはヒープ構造にすべきらしいが手抜き
                 if (!B.some((path) => path.join(',') == totalPath.join(','))) {
                     B.push(totalPath);
                     console.log('Added to B', totalPath);
@@ -126,12 +128,6 @@ function YenKSP(graphHash, source, sink, K) {
                 console.log('restoreNode', removedNode);
                 graphHash[removedNode.key] = removedNode.value;
             }
-
-            //if (JSON.stringify(originalGraphHash) != JSON.stringify(graphHash)) {
-            //    console.log(JSON.stringify(originalGraphHash, null, 2));
-            //    console.log(JSON.stringify(graphHash, null, 2));
-            //    throw new Error('復元されていません');
-            //}
         }
 
         if (B.length == 0) {
@@ -255,10 +251,13 @@ async function main() {
     //console.log(ret);
 
     let ret = YenKSP(graphHash, 'C', 'H', 3);
+    console.log('経路:');
     console.log(ret);
 }
 
-//main();
+if (typeof require != 'undefined' && require.main === module) {
+    main();
+}
 
 module.exports = {
     YenKSP,
