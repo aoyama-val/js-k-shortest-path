@@ -4,9 +4,11 @@
 
 const Graph = require('node-dijkstra');
 
-function addNode(graphHash, node) {
-    if (graphHash[node] == undefined) {
-        graphHash[node] = {};
+let console = {
+    log: function() {
+    },
+    error: function(a) {
+
     }
 }
 
@@ -40,7 +42,12 @@ function Dijkstra(graphHash, from, to) {
 function YenKSP(graphHash, source, sink, K) {
     var A = [];
     // Determine the shortest path from the source to the sink.
-    A[0] = Dijkstra(graphHash, source, sink).path;
+    let shortestPath = Dijkstra(graphHash, source, sink).path;
+    if (shortestPath == null) {
+        console.log("no shortest path");
+        return A;
+    }
+    A[0] = shortestPath;
     console.log(A);
     // Initialize the set to store the potential kth shortest path.
     var B = [];
@@ -243,7 +250,6 @@ async function main() {
     addEdge(graphHash, 'F', 'G', 2);
     addEdge(graphHash, 'F', 'H', 1);
     addEdge(graphHash, 'G', 'H', 2);
-    addNode(graphHash, 'H');
 
     //let ret = Dijkstra(graphHash);
     //console.log(ret);
@@ -252,4 +258,8 @@ async function main() {
     console.log(ret);
 }
 
-main();
+//main();
+
+module.exports = {
+    YenKSP,
+};
