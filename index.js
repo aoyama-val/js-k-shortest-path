@@ -1,5 +1,8 @@
+////////////////////////////////////////////////////////////////////////////////
+//   Yen's Algorithmを実装してK shortest path問題を解くスクリプト
+////////////////////////////////////////////////////////////////////////////////
+
 const Graph = require('node-dijkstra');
-const deepcopy = require('deepcopy');
 
 function addNode(graphHash, node) {
     if (graphHash[node] == undefined) {
@@ -35,8 +38,6 @@ function Dijkstra(graphHash, from, to) {
 }
 
 function YenKSP(graphHash, source, sink, K) {
-    let originalGraphHash = deepcopy(graphHash);
-
     var A = [];
     // Determine the shortest path from the source to the sink.
     A[0] = Dijkstra(graphHash, source, sink).path;
@@ -179,6 +180,8 @@ function removeNode(graphHash, node) {
 }
 
 
+// https://en.wikipedia.org/wiki/Yen%27s_algorithm
+//
 //function YenKSP(Graph, source, sink, K):
 //   // Determine the shortest path from the source to the sink.
 //   A[0] = Dijkstra(Graph, source, sink);

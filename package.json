@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "deepcopy": "^2.0.0",
     "node-dijkstra": "^2.5.0"
   }
 }
